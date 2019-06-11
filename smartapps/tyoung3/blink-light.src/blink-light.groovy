@@ -30,6 +30,7 @@ definition(
 preferences {
 	section("When there is motion or a contact change, blink a light up to ten seconds.  Optionally, blink S.O.S if motion detected.") {
 		input "motion1", "capability.motionSensor", title: "What motion?", multiple: true,required: false 
+		input "motion2", "capability.accelerationSensor", title: "What Acceleration?", multiple: true, required: false
 	}
 	section("Blink a light when this contact opens or closes.") {
 		input "contact1", "capability.contactSensor", title: "What contact?",multiple: true,required: false
@@ -51,12 +52,14 @@ preferences {
 
 def installed() {
 	subscribe(motion1, "motion.active", motionActive)
+	subscribe(motion2, "acceleration.active", motionActive)
 	subscribe(contact1, "contact", blinker)
 }
 
 def updated() {
 	unsubscribe()
 	subscribe(motion1, "motion.active", motionActive)
+	subscribe(motion2, "acceleration.active", motionActive)
 	subscribe(contact1, "contact", blinker)
 }
 
